@@ -1,14 +1,8 @@
 package io.github.eliaspinheiropereira.prod_cleanarch_api.config;
 
-import io.github.eliaspinheiropereira.prod_cleanarch_api.core.dataprovider.BuscarProdutoPorId;
-import io.github.eliaspinheiropereira.prod_cleanarch_api.core.dataprovider.BuscarTodosProdutos;
-import io.github.eliaspinheiropereira.prod_cleanarch_api.core.dataprovider.SalvarProduto;
-import io.github.eliaspinheiropereira.prod_cleanarch_api.core.usecase.BuscandoProdutoPorIdUseCase;
-import io.github.eliaspinheiropereira.prod_cleanarch_api.core.usecase.BuscarTodosProdutosUseCase;
-import io.github.eliaspinheiropereira.prod_cleanarch_api.core.usecase.InserindoProdutoUseCase;
-import io.github.eliaspinheiropereira.prod_cleanarch_api.core.usecase.impl.BuscandoProdutoPorIdUseCaseImpl;
-import io.github.eliaspinheiropereira.prod_cleanarch_api.core.usecase.impl.BuscarTodosProdutosUseCaseImpl;
-import io.github.eliaspinheiropereira.prod_cleanarch_api.core.usecase.impl.InserindoProdutoUseCaseImpl;
+import io.github.eliaspinheiropereira.prod_cleanarch_api.core.dataprovider.*;
+import io.github.eliaspinheiropereira.prod_cleanarch_api.core.usecase.*;
+import io.github.eliaspinheiropereira.prod_cleanarch_api.core.usecase.impl.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,6 +12,22 @@ public class UseCaseConfig {
     @Bean
     public InserindoProdutoUseCase inserindoProdutoUseCase(SalvarProduto salvarProduto){
         return new InserindoProdutoUseCaseImpl(salvarProduto);
+    }
+
+    @Bean
+    public AtualizandoProdutoUseCase atualizandoProdutoUseCase(
+            BuscarProdutoPorId buscarProdutoPorId,
+            AtualizarProduto atualizarProduto
+    ){
+        return new AtualizandoProdutoUseCaseImpl(buscarProdutoPorId, atualizarProduto);
+    }
+
+    @Bean
+    public DeletandoProdutoUseCase deletandoProdutoUseCase(
+            BuscarProdutoPorId buscarProdutoPorId,
+            DeletandoProduto deletandoProduto
+    ){
+        return new DeletandoProdutoUseCaseImpl(buscarProdutoPorId, deletandoProduto);
     }
 
     @Bean

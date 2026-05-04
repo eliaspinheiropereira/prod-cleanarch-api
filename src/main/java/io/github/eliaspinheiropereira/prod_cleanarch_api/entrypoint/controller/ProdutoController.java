@@ -1,12 +1,10 @@
 package io.github.eliaspinheiropereira.prod_cleanarch_api.entrypoint.controller;
 
 import io.github.eliaspinheiropereira.prod_cleanarch_api.core.domain.PageResult;
-import io.github.eliaspinheiropereira.prod_cleanarch_api.core.usecase.BuscandoProdutoPorIdUseCase;
-import io.github.eliaspinheiropereira.prod_cleanarch_api.core.usecase.BuscarTodosProdutosUseCase;
-import io.github.eliaspinheiropereira.prod_cleanarch_api.core.usecase.InserindoProdutoUseCase;
-import io.github.eliaspinheiropereira.prod_cleanarch_api.entrypoint.response.BuscarProdutoDTO;
-import io.github.eliaspinheiropereira.prod_cleanarch_api.entrypoint.request.SalvarProdutoDTO;
+import io.github.eliaspinheiropereira.prod_cleanarch_api.core.usecase.*;
 import io.github.eliaspinheiropereira.prod_cleanarch_api.entrypoint.controller.mapper.ProdutoMapper;
+import io.github.eliaspinheiropereira.prod_cleanarch_api.entrypoint.request.SalvarProdutoDTO;
+import io.github.eliaspinheiropereira.prod_cleanarch_api.entrypoint.response.BuscarProdutoDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +25,12 @@ public class ProdutoController {
     private BuscandoProdutoPorIdUseCase buscandoProdutoPorIdUseCase;
 
     @Autowired
+    private AtualizandoProdutoUseCase atualizandoProdutoUseCase;
+
+    @Autowired
+    private DeletandoProdutoUseCase deletandoProdutoUseCase;
+
+    @Autowired
     private ProdutoMapper produtoMapper;
 
     @PostMapping
@@ -36,6 +40,24 @@ public class ProdutoController {
         var produto = this.produtoMapper.toProduto(salvarProdutoDTO);
         this.inserindoProdutoUseCase.save(produto);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(
+            @PathVariable int id,
+            @Valid @RequestBody SalvarProdutoDTO salvarProdutoDTO
+    ){
+        var produto = this.produtoMapper.toProduto(salvarProdutoDTO);
+        this.atualizandoProdutoUseCase.update(id, produto);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletando(
+            @PathVariable int id
+    ){
+        this.deletandoProdutoUseCase.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/{id}")
